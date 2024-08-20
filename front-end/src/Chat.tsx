@@ -76,7 +76,8 @@ export const Chat = () => {
         <button onClick={sendMessage}>Send</button>
       </div>
       <div>
-        <button onClick={receiveMessage}>{fetchedMessage.username}<br></br>{fetchedMessage.message}</button>
+        <button onClick={receiveMessage}>Get from go api</button><br></br>
+        {fetchedMessage.username}<br></br>{fetchedMessage.message}
       </div>
     </div>
   );
