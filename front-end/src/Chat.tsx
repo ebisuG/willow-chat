@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 
 interface message {
     username : string
@@ -37,7 +37,14 @@ export const Chat = () => {
 
   return (
     <div>
-      <h1>Real-time Chat</h1>
+      <h1>Chat Room</h1>
+        <div>
+          {messages.map((msg, index) => (
+            <div key={index}>
+              <strong>{msg.username}</strong>: {msg.message}
+            </div>
+          ))}
+        </div>
       <div>
         <input
           type="text"
@@ -52,13 +59,6 @@ export const Chat = () => {
           onChange={(e) => setMessage(e.target.value)}
         />
         <button onClick={sendMessage}>Send</button>
-      </div>
-      <div>
-        {messages.map((msg, index) => (
-          <div key={index}>
-            <strong>{msg.username}</strong>: {msg.message}
-          </div>
-        ))}
       </div>
     </div>
   );
