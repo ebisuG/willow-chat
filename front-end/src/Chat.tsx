@@ -5,13 +5,15 @@ interface message {
     message : string
 }
 
+const BACKEND_ENDPOINT=import.meta.env.VITE_BACKEND_ENDPOINT
+
 export const Chat = () => {
   const [username, setUsername] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<message[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080/ws');
+    const ws = new WebSocket(BACKEND_ENDPOINT);
 
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
@@ -24,7 +26,7 @@ export const Chat = () => {
   }, []);
 
   const sendMessage = () => {
-    const ws = new WebSocket('ws://localhost:8080/ws');
+    const ws = new WebSocket(BACKEND_ENDPOINT);
     const msg = {
       username: username,
       message: message,
