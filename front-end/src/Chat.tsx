@@ -7,13 +7,15 @@ interface message {
   roomId: string
 }
 
+//response body is {"latestHistory": []}
+
 const BACKEND_RECEIVE = import.meta.env.VITE_BACKEND_RECEIVE
 const BACKEND_SEND = import.meta.env.VITE_BACKEND_SEND
 
 export const Chat = () => {
   const [from, setFrom] = useState('');
   const [message, setMessage] = useState('');
-  const [fetchedMessage, setFetchedMessage] = useState<message[]>([]);
+  const [fetchedMessage, setFetchedMessage] = useState<message[]>();
 
   // useEffect(() => {
   //   receiveMessage()
@@ -33,9 +35,9 @@ export const Chat = () => {
   const receiveMessage = () => {
     async function fetchMessage() {
       const fetched = await fetch(BACKEND_RECEIVE)
-      const history: message[] = await fetched.json()
-      if (history !== undefined) {
-        setFetchedMessage(history)
+      const historyObj: { "latestHistory": message[] } = await fetched.json()
+      if (historyObj.latestHistory.length !== 0) {
+        setFetchedMessage(historyObj.latestHistory)
       }
     }
     console.log(fetchedMessage)
@@ -47,21 +49,21 @@ export const Chat = () => {
   //   return true;
   // }
 
-  const showHistory = (history: message[]) => {
-    if (Array.isArray(history)) return null;
-    return (history.map((elem:message, index:number) => {
-      console.log(elem, index)
-      console.log(history)
-      return (<>
-        <div key={index}>
-          {elem.date}
-          {elem.from}
-          {elem.message}
-        </div>
-      </>)
-    })
-    )
-
+  const showHistory = (history: message[] | undefined) => {
+    if (!Array.isArray(history) || history === undefined) { return null } else {
+      return (history.map((elem: message, index: number) => {
+        console.log(elem, index)
+        console.log(history)
+        return (<>
+          <div key={index}>
+            {elem.date}
+            {elem.from}
+            {elem.message}
+          </div>
+        </>)
+      })
+      )
+    }
   }
   return (
     <div>
