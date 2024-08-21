@@ -34,7 +34,7 @@ export const Chat = () => {
     async function fetchMessage() {
       const fetched = await fetch(BACKEND_SEND, {
         method: "POST",
-        body: JSON.stringify({ from: from, message: message, date: new Date().toISOString(), roomId: 100 })
+        body: JSON.stringify({ from: from, message: message, date: new Date().toISOString(), roomId: "100" })
       })
       console.log(fetched)
     }
