@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -20,10 +19,10 @@ import (
 
 func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	// var roomId string
-	urlPath := r.URL.Path
-	sliceUrl := strings.Split(urlPath, "/")
-	roomId := sliceUrl[len(sliceUrl)-1:][0]
-	log.Println("urlPath : ", urlPath)
+	// urlPath := r.URL
+	// sliceUrl := strings.Split(urlPath, "/")
+	var roomId string = r.URL.Query().Get("roomId")
+	// log.Println("urlPath : ", urlPath)
 	log.Println("roomId : ", roomId)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
