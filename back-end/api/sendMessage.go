@@ -17,7 +17,7 @@ import (
 // insert message to room with roomId
 type message struct {
 	From    string `json:"from"`
-	Date    string `json:"Date"`
+	Date    string `json:"date"`
 	Message string `json:"message"`
 	RoomId  string `json:"roomId"`
 }
