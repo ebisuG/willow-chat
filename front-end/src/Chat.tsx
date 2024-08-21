@@ -42,11 +42,27 @@ export const Chat = () => {
     fetchMessage()
   }
 
-  const canMapUse = (array: Array<any>) => { //eslint-disable-line @typescript-eslint/no-explicit-any
-    if (array.length === 0) return false;
-    return true;
-  }
+  // const canMapUse = (array: Array<any>) => { //eslint-disable-line @typescript-eslint/no-explicit-any
+  //   if (array.length === 0) return false;
+  //   return true;
+  // }
 
+  const showHistory = (history: message[]) => {
+    if (Array.isArray(history)) return null;
+    return (history.map((elem:message, index:number) => {
+      console.log(elem, index)
+      console.log(history)
+      return (<>
+        <div key={index}>
+          {elem.date}
+          {elem.from}
+          {elem.message}
+        </div>
+      </>)
+    })
+    )
+
+  }
   return (
     <div>
       <h1>Chat Room</h1>
@@ -67,20 +83,7 @@ export const Chat = () => {
       </div>
       <div>
         <button onClick={receiveMessage}>Get from go api</button><br></br>
-        {canMapUse(fetchedMessage) ?
-          fetchedMessage?.map((elem, index) => {
-            console.log(elem, index)
-            console.log(fetchedMessage)
-            return (<>
-              <div key={index}>
-                {elem.date}
-                {elem.from}
-                {elem.message}
-              </div>
-            </>)
-          })
-          : null
-        }
+        {showHistory(fetchedMessage)}
         {/* {fetchedMessage?.from}<br></br>{fetchedMessage?.message} */}
       </div>
     </div>
