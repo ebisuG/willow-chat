@@ -13,7 +13,7 @@ const BACKEND_SEND = import.meta.env.VITE_BACKEND_SEND
 export const Chat = () => {
   const [from, setFrom] = useState('');
   const [message, setMessage] = useState('');
-  const [fetchedMessage, setFetchedMessage] = useState<message[]>();
+  const [fetchedMessage, setFetchedMessage] = useState<message[]>([]);
 
   useEffect(() => {
     receiveMessage()
@@ -42,6 +42,11 @@ export const Chat = () => {
     fetchMessage()
   }
 
+  const canMapUse = (array: Array<any>) => { //eslint-disable-line @typescript-eslint/no-explicit-any
+    if (array.length === 0) return false;
+    return true;
+  }
+
   return (
     <div>
       <h1>Chat Room</h1>
@@ -62,15 +67,18 @@ export const Chat = () => {
       </div>
       <div>
         <button onClick={receiveMessage}>Get from go api</button><br></br>
-        {fetchedMessage?.map((elem, index) => {
-          return (<>
-            <div key={index}>
-              {elem.date}
-              {elem.from}
-              {elem.message}
-            </div>
-          </>)
-        })}
+        {canMapUse(fetchedMessage) ?
+          fetchedMessage?.map((elem, index) => {
+            return (<>
+              <div key={index}>
+                {elem.date}
+                {elem.from}
+                {elem.message}
+              </div>
+            </>)
+          })
+          : null
+        }
         {/* {fetchedMessage?.from}<br></br>{fetchedMessage?.message} */}
       </div>
     </div>
