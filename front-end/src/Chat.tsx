@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 
 interface message {
-  username: string
+  from: string
+  date: string
   message: string
+  roomId: string
 }
 
 const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT
 const BACKEND_RECEIVE = import.meta.env.VITE_BACKEND_RECEIVE
+const BACKEND_SEND = import.meta.env.VITE_BACKEND_SEND
 
 export const Chat = () => {
-  const [username, setUsername] = useState('');
+  const [from, setFrom] = useState('');
   const [message, setMessage] = useState('');
-  const [fetchedMessage, setFetchedMessage] = useState<message>({ username: "", message: "" });
+  const [fetchedMessage, setFetchedMessage] = useState<message>();
   const [messages, setMessages] = useState<message[]>([]);
 
   useEffect(() => {
@@ -28,15 +31,14 @@ export const Chat = () => {
   }, []);
 
   const sendMessage = () => {
-    const ws = new WebSocket(BACKEND_ENDPOINT);
-    const msg = {
-      username: username,
-      message: message,
-    };
-    ws.onopen = () => {
-      ws.send(JSON.stringify(msg));
-    };
-    setMessage('');
+    async function fetchMessage() {
+      const fetched = await fetch(BACKEND_SEND, {
+        method: "POST",
+        body: JSON.stringify({ from: from, message: message, date: new Date().toISOString(), roomId: 100 })
+      })
+      console.log(fetched)
+    }
+    fetchMessage()
   };
 
   const receiveMessage = () => {
@@ -47,6 +49,7 @@ export const Chat = () => {
         setFetchedMessage(jsoned)
       }
     }
+    console.log(fetchedMessage)
     fetchMessage()
   }
 
@@ -56,16 +59,16 @@ export const Chat = () => {
       <div>
         {messages.map((msg, index) => (
           <div key={index}>
-            <strong>{msg.username}</strong>: {msg.message}
+            <strong>{msg.from}</strong>: {msg.message}
           </div>
         ))}
       </div>
       <div>
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="From"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
         />
         <input
           type="text"
@@ -77,7 +80,7 @@ export const Chat = () => {
       </div>
       <div>
         <button onClick={receiveMessage}>Get from go api</button><br></br>
-        {fetchedMessage.username}<br></br>{fetchedMessage.message}
+        {fetchedMessage?.from}<br></br>{fetchedMessage?.message}
       </div>
     </div>
   );
