@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Card, CardHeader, CardBody, CardFooter,  Button, Input } from '@chakra-ui/react'
 
 interface message {
   from: string
@@ -7,8 +8,6 @@ interface message {
   roomId: string
 }
 
-//response body is {"latestHistory": []}
-
 const BACKEND_RECEIVE = import.meta.env.VITE_BACKEND_RECEIVE
 const BACKEND_SEND = import.meta.env.VITE_BACKEND_SEND
 
@@ -16,10 +15,6 @@ export const Chat = () => {
   const [from, setFrom] = useState('');
   const [message, setMessage] = useState('');
   const [fetchedMessage, setFetchedMessage] = useState<message[]>();
-
-  // useEffect(() => {
-  //   receiveMessage()
-  // }, []);
 
   const sendMessage = () => {
     async function fetchMessage() {
@@ -44,21 +39,22 @@ export const Chat = () => {
     fetchMessage()
   }
 
-  // const canMapUse = (array: Array<any>) => { //eslint-disable-line @typescript-eslint/no-explicit-any
-  //   if (array.length === 0) return false;
-  //   return true;
-  // }
-
   const showHistory = (history: message[] | undefined) => {
     if (!Array.isArray(history) || history === undefined) { return null } else {
       return (history.map((elem: message, index: number) => {
         console.log(elem, index)
         console.log(history)
+        const dateObj = new Date(elem.date)
+        const dateFormatted = `${dateObj.getFullYear()}-${dateObj.getDate()}-${dateObj.getDay()}`
         return (<>
           <div key={index}>
-            {elem.date}
-            {elem.from}
-            {elem.message}
+            <Card>
+              <CardBody>
+                {dateFormatted} :
+                {elem.from}<br></br>
+                {elem.message}
+              </CardBody>
+            </Card>
           </div>
         </>)
       })
@@ -67,27 +63,36 @@ export const Chat = () => {
   }
   return (
     <div>
-      <h1>Chat Room</h1>
-      <div>
-        <input
-          type="text"
-          placeholder="From"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-      <div>
-        <button onClick={receiveMessage}>Get from go api</button><br></br>
-        {showHistory(fetchedMessage)}
-        {/* {fetchedMessage?.from}<br></br>{fetchedMessage?.message} */}
-      </div>
+      <Card align={"center"}>
+        <CardBody>
+          <CardHeader fontFamily={"Arial Narrow"} textAlign={"center"}>
+            <h1>Chat Room</h1>
+          </CardHeader>
+          <div>
+            {showHistory(fetchedMessage)}
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div>
+            <Input
+              type="text"
+              placeholder="From"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            >
+            </Input>
+            <Input
+              type="text"
+              placeholder="Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            >
+            </Input>
+            <Button m="10px" onClick={sendMessage}>Send</Button>
+            <Button m="10px" onClick={receiveMessage}>Receive History</Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

@@ -4,7 +4,8 @@ import Chat from './Chat'
 function App() {
   return (
     <>
-    <Chat></Chat>
+        <Chat></Chat>
+
     </>
   )
 }
