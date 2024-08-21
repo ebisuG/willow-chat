@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface message {
   from: string
@@ -15,9 +15,9 @@ export const Chat = () => {
   const [message, setMessage] = useState('');
   const [fetchedMessage, setFetchedMessage] = useState<message[]>([]);
 
-  useEffect(() => {
-    receiveMessage()
-  }, []);
+  // useEffect(() => {
+  //   receiveMessage()
+  // }, []);
 
   const sendMessage = () => {
     async function fetchMessage() {
@@ -69,6 +69,8 @@ export const Chat = () => {
         <button onClick={receiveMessage}>Get from go api</button><br></br>
         {canMapUse(fetchedMessage) ?
           fetchedMessage?.map((elem, index) => {
+            console.log(elem, index)
+            console.log(fetchedMessage)
             return (<>
               <div key={index}>
                 {elem.date}
