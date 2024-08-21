@@ -31,6 +31,8 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	}
 	client := redis.NewClient(opt)
 	ctx := context.Background()
+	log.Println("Client : ", client)
+	log.Println("Client info : ", client.Info(ctx))
 	log.Println("Connection established")
 
 	//get last 10 messages in one room
