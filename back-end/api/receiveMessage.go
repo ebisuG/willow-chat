@@ -35,8 +35,12 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 
 	//get last 10 messages in one room
 
-	result := client.Set(ctx, "foo", "sampleMessage", 0).Err()
-	log.Println("Set : ", result)
+	err = client.Set(ctx, "foo", "sampleMessage", 0).Err()
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("Set : ", err)
 
 	val2, err := client.Get(ctx, "foo").Result()
 	if err != nil {
@@ -45,10 +49,22 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Simple string")
 	log.Println("foo", val2)
 
-	val3 := client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member1", Score: 1})
-	val4 := client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member2", Score: 2})
-	val5 := client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member3", Score: 3})
-	log.Println(val3, val4, val5)
+	err = client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member1", Score: 1}).Err()
+	if err != nil {
+		panic(err)
+	}
+	log.Println(err)
+	err = client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member2", Score: 2}).Err()
+	if err != nil {
+		panic(err)
+	}
+	log.Println(err)
+	err = client.ZAdd(ctx, "zadd-key", redis.Z{Member: "member3", Score: 3}).Err()
+	if err != nil {
+		panic(err)
+	}
+	log.Println(err)
+	log.Println(err)
 
 	val6, err := client.ZRangeByScore(ctx, "zadd-key", &redis.ZRangeBy{Min: "-inf", Max: "+inf", Offset: 0, Count: 5}).Result()
 	if err != nil {
