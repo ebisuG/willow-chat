@@ -36,7 +36,6 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	log.Println("opt : ", opt)
 	client := redis.NewClient(opt)
 	ctx := context.Background()
-	log.Println("Client : ", client)
 	log.Println("Client info : ", client.Info(ctx))
 	log.Println("Connection established")
 
