@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -29,6 +30,10 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	opt.TLSConfig = &tls.Config{
+		MinVersion: tls.VersionTLS12,
+	}
+	log.Println("opt : ", opt)
 	client := redis.NewClient(opt)
 	ctx := context.Background()
 	log.Println("Client : ", client)
