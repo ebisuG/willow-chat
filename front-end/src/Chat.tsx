@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardHeader, CardBody, CardFooter,  Button, Input } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Button, Input, Grid, GridItem } from '@chakra-ui/react'
 
 interface message {
   from: string
@@ -40,6 +40,9 @@ export const Chat = () => {
   }
 
   const showHistory = (history: message[] | undefined) => {
+    // history = [{ from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo', roomId: '100' },
+    // { from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooooooooooo', roomId: '100' }
+    // ] //test code
     if (!Array.isArray(history) || history === undefined) { return null } else {
       return (history.map((elem: message, index: number) => {
         console.log(elem, index)
@@ -48,13 +51,18 @@ export const Chat = () => {
         const dateFormatted = `${dateObj.getFullYear()}-${dateObj.getDate()}-${dateObj.getDay()}`
         return (<>
           <div key={index}>
-            <Card>
-              <CardBody>
-                {dateFormatted} :
-                {elem.from}<br></br>
-                {elem.message}
-              </CardBody>
-            </Card>
+            <Grid gridTemplateColumns={'200px 1fr'}>
+              <GridItem>
+                <CardBody h={"auto"} bg={"papayawhip"}>
+                  {dateFormatted}:{elem.from}
+                </CardBody>
+              </GridItem>
+              <GridItem>
+                <CardBody h={"auto"} bg={"tomato"} display={"inline-block"} maxW={"600px"}>
+                  {elem.message}
+                </CardBody>
+              </GridItem>
+            </Grid>
           </div>
         </>)
       })
@@ -69,7 +77,9 @@ export const Chat = () => {
             <h1>Chat Room</h1>
           </CardHeader>
           <div>
-            {showHistory(fetchedMessage)}
+            <Card w={"800px"}>
+              {showHistory(fetchedMessage)}
+            </Card>
           </div>
         </CardBody>
         <CardFooter>
