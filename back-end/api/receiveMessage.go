@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -21,7 +22,9 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	opt, err := redis.ParseURL("redis://default:@localhost:6379")
+	redisUrl := os.Getenv("REDIS_URL")
+
+	opt, err := redis.ParseURL(redisUrl)
 	if err != nil {
 		panic(err)
 	}
