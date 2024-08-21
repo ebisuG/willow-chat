@@ -22,6 +22,11 @@ type message struct {
 	RoomId  string `json:"roomId"`
 }
 
+func (m message) MarshalBinary() ([]byte, error) {
+	data, err := json.Marshal(m)
+	return data, err
+}
+
 func SendeMessage(w http.ResponseWriter, r *http.Request) {
 	// var roomId string
 	if method := r.Method; method != "POST" {
@@ -54,18 +59,20 @@ func SendeMessage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Connection established")
 	log.Println("Request is :", messageFromResponse)
 
-	//add client message to redis
-	score, err := time.Parse("2006-01-02T15:04:05-0700", messageFromResponse.Date)
+	score, err := time.Parse(time.RFC3339, messageFromResponse.Date)
 	if err != nil {
 		panic(err)
 	}
-	// err = json.Unmarshal(messageFromResponse).Encode(messageToRedis)
-	// err = json.NewEncoder(messageFromResponse).Encode(messageToRedis)
-	err = client.ZAdd(ctx, messageFromResponse.RoomId, redis.Z{Member: messageFromResponse, Score: float64(time.Time.Unix(score))}).Err()
+	addData, err := messageFromResponse.MarshalBinary()
 	if err != nil {
 		panic(err)
 	}
-	latestHistory, err := client.ZRangeByScore(ctx, "zadd-key", &redis.ZRangeBy{Min: "-inf", Max: "+inf", Offset: 0, Count: 10}).Result()
+
+	err = client.ZAdd(ctx, messageFromResponse.RoomId, redis.Z{Member: addData, Score: float64(time.Time.Unix(score))}).Err()
+	if err != nil {
+		panic(err)
+	}
+	latestHistory, err := client.ZRangeByScore(ctx, messageFromResponse.RoomId, &redis.ZRangeBy{Min: "-inf", Max: "+inf", Offset: 0, Count: 10}).Result()
 	if err != nil {
 		panic(err)
 	}
