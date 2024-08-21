@@ -52,6 +52,7 @@ func SendeMessage(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	log.Println("Client info : ", client.Info(ctx))
 	log.Println("Connection established")
+	log.Println("Request is :", messageFromResponse)
 
 	//add client message to redis
 	score, err := time.Parse("2006-01-02T15:04:05-0700", messageFromResponse.date)
@@ -69,7 +70,7 @@ func SendeMessage(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	log.Println("Use ZrangeByScore")
-	log.Println(latestHistory)
+	log.Println("latesthistory is :", latestHistory)
 
 	response := map[string]interface{}{
 		"latestHistory": latestHistory,
