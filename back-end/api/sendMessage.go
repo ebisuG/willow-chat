@@ -16,10 +16,10 @@ import (
 // Check roomid
 // insert message to room with roomId
 type message struct {
-	from    string
-	date    string
-	message string
-	roomId  string
+	From    string `json:"from"`
+	Date    string `json:"Date"`
+	Message string `json:"message"`
+	RoomId  string `json:"roomId"`
 }
 
 func SendeMessage(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func SendeMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Only accept POST")
 		return
 	}
-	var messageFromResponse *message
+	var messageFromResponse message
 	err := json.NewDecoder(r.Body).Decode(&messageFromResponse)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -55,13 +55,13 @@ func SendeMessage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request is :", messageFromResponse)
 
 	//add client message to redis
-	score, err := time.Parse("2006-01-02T15:04:05-0700", messageFromResponse.date)
+	score, err := time.Parse("2006-01-02T15:04:05-0700", messageFromResponse.Date)
 	if err != nil {
 		panic(err)
 	}
 	// err = json.Unmarshal(messageFromResponse).Encode(messageToRedis)
 	// err = json.NewEncoder(messageFromResponse).Encode(messageToRedis)
-	err = client.ZAdd(ctx, messageFromResponse.roomId, redis.Z{Member: messageFromResponse, Score: float64(time.Time.Unix(score))}).Err()
+	err = client.ZAdd(ctx, messageFromResponse.RoomId, redis.Z{Member: messageFromResponse, Score: float64(time.Time.Unix(score))}).Err()
 	if err != nil {
 		panic(err)
 	}
