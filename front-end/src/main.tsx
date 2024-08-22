@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       <AuthProvider>
         <ProtectedRoute>
           <Secret />
-        </ProtectedRoute>,
+        </ProtectedRoute>
       </AuthProvider>
   },
 ]);
