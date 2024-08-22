@@ -6,7 +6,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }>
         const isAuth = useAuth()?.user?.isAuth;
         if (!isAuth) {
             // user is not authenticated
-            return <Navigate to="/login" />;
+            return <Navigate to="/chat" />;
         }
         return children;
     };
