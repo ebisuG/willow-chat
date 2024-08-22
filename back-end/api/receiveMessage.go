@@ -46,15 +46,19 @@ func ReceiveMessage(w http.ResponseWriter, r *http.Request) {
 	//get last 10 messages in one room
 	log.Println("Set : ", err)
 
-	latestHistory, err := client.ZRangeByScore(ctx, roomId, &redis.ZRangeBy{Min: "-inf", Max: "+inf", Offset: 0, Count: 10}).Result()
+	latestHistory, err := client.ZRevRangeByScore(ctx, roomId, &redis.ZRangeBy{Min: "-inf", Max: "+inf", Offset: 0, Count: 10}).Result()
 	if err != nil {
 		panic(err)
 	}
+	var sortedHistory []string
+	for i := len(latestHistory) - 1; i > -1; i-- {
+		sortedHistory = append(sortedHistory, latestHistory[i])
+	}
 	log.Println("Use ZrangeByScore")
-	log.Println("latesthistory is :", latestHistory)
+	log.Println("sortedHistory is :", sortedHistory)
 
 	response := map[string]interface{}{
-		"latestHistory": latestHistory,
+		"sortedHistory": sortedHistory,
 	}
 	json.NewEncoder(w).Encode(response)
 }
