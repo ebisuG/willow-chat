@@ -30,9 +30,9 @@ export const Chat = () => {
   const receiveMessage = () => {
     async function fetchMessage() {
       const fetched = await fetch(BACKEND_RECEIVE + `?roomId=100`)
-      const historyObj: { "latestHistory": string[] } = await fetched.json()
-      if (historyObj.latestHistory.length !== 0) {
-        setFetchedMessage(historyObj.latestHistory.map((elem) => JSON.parse(elem)))
+      const historyObj: { "sortedHistory": string[] } = await fetched.json()
+      if (historyObj.sortedHistory.length !== 0) {
+        setFetchedMessage(historyObj.sortedHistory.map((elem) => JSON.parse(elem)))
       }
     }
     console.log(fetchedMessage)
