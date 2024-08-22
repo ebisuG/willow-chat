@@ -1,50 +1,35 @@
-# React + TypeScript + Vite
+## Files
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### package.json
 
-Currently, two official plugins are available:
+ - vercel-build<br>
+ Vercel runs this command when it builds app.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### .env.example
 
-## Expanding the ESLint configuration
+ - VITE_BACKEND_RECEIVE<br>
+ An endpoint to receive data from Redis.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+ - VITE_BACKEND_SEND<br>
+ An endpoint to send data to Redis.
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Commands
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Redis CLI: 
+SET/GET : only takes key/value. <br>
+SADD/SMEMBERS : takes key/value. but one key can have multiple values, with no order. <br>
+ZADD/ZRANGE : takes key/value and score(=definition of order). one key has multiple values with order. <br>
+HSET/HGET,HGETALL : takes key/field-value(=map) pairs. can get value by key+field definition, can get all field-value pairs by key.<br>
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Tech Stack - Front End
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+###
+
+## Other Things
+
+
+I thought using firebase, but it seems it needs to upload secret-key to github for authorization of access to firestore from vercel.
+So I deceided not to use firebase because of security concern.
+
+

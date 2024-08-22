@@ -1,67 +1,108 @@
-import  { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Card, CardHeader, CardBody, CardFooter, Button, Input, Grid, GridItem } from '@chakra-ui/react'
 
 interface message {
-    username : string
-    message : string
+  from: string
+  date: string
+  message: string
+  roomId: string
 }
 
-const BACKEND_ENDPOINT=import.meta.env.VITE_BACKEND_ENDPOINT
+const BACKEND_RECEIVE = import.meta.env.VITE_BACKEND_RECEIVE
+const BACKEND_SEND = import.meta.env.VITE_BACKEND_SEND
 
 export const Chat = () => {
-  const [username, setUsername] = useState('');
+  const [from, setFrom] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<message[]>([]);
-
-  useEffect(() => {
-    const ws = new WebSocket(BACKEND_ENDPOINT);
-
-    ws.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      setMessages((messages) => [...messages, msg]);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
+  const [fetchedMessage, setFetchedMessage] = useState<message[]>();
 
   const sendMessage = () => {
-    const ws = new WebSocket(BACKEND_ENDPOINT);
-    const msg = {
-      username: username,
-      message: message,
-    };
-    ws.onopen = () => {
-      ws.send(JSON.stringify(msg));
-    };
-    setMessage('');
+    async function fetchMessage() {
+      const fetched = await fetch(BACKEND_SEND, {
+        method: "POST",
+        body: JSON.stringify({ from: from, message: message, date: new Date().toISOString(), roomId: "100" })
+      })
+      console.log(fetched)
+    }
+    fetchMessage()
   };
 
+  const receiveMessage = () => {
+    async function fetchMessage() {
+      const fetched = await fetch(BACKEND_RECEIVE + `?roomId=100`)
+      const historyObj: { "latestHistory": string[] } = await fetched.json()
+      if (historyObj.latestHistory.length !== 0) {
+        setFetchedMessage(historyObj.latestHistory.map((elem) => JSON.parse(elem)))
+      }
+    }
+    console.log(fetchedMessage)
+    fetchMessage()
+  }
+
+  const showHistory = (history: message[] | undefined) => {
+    // history = [{ from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo', roomId: '100' },
+    // { from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooooooooooo', roomId: '100' }
+    // ] //test code
+    if (!Array.isArray(history) || history === undefined) { return null } else {
+      return (history.map((elem: message, index: number) => {
+        console.log(elem, index)
+        console.log(history)
+        const dateObj = new Date(elem.date)
+        const dateFormatted = `${dateObj.getFullYear()}-${dateObj.getDate()}-${dateObj.getDay()}`
+        return (<>
+          <div key={index}>
+            <Grid gridTemplateColumns={'200px 1fr'}>
+              <GridItem>
+                <CardBody h={"auto"} bg={"papayawhip"}>
+                  {dateFormatted}:{elem.from}
+                </CardBody>
+              </GridItem>
+              <GridItem>
+                <CardBody h={"auto"} bg={"tomato"} display={"inline-block"} maxW={"600px"}>
+                  {elem.message}
+                </CardBody>
+              </GridItem>
+            </Grid>
+          </div>
+        </>)
+      })
+      )
+    }
+  }
   return (
     <div>
-      <h1>Chat Room</h1>
-        <div>
-          {messages.map((msg, index) => (
-            <div key={index}>
-              <strong>{msg.username}</strong>: {msg.message}
-            </div>
-          ))}
-        </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
+      <Card align={"center"}>
+        <CardBody>
+          <CardHeader fontFamily={"Arial Narrow"} textAlign={"center"}>
+            <h1>Chat Room</h1>
+          </CardHeader>
+          <div>
+            <Card w={"800px"}>
+              {showHistory(fetchedMessage)}
+            </Card>
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div>
+            <Input
+              type="text"
+              placeholder="From"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            >
+            </Input>
+            <Input
+              type="text"
+              placeholder="Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            >
+            </Input>
+            <Button m="10px" onClick={sendMessage}>Send</Button>
+            <Button m="10px" onClick={receiveMessage}>Receive History</Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
