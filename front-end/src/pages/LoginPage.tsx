@@ -9,9 +9,11 @@ import {
   FormLabel,
 
 } from '@chakra-ui/react'
+import { useNavigate } from "react-router-dom";
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
   const login = useAuth()?.login;
   if (login === undefined) {
     throw Error("Failed to initialization, login")
@@ -40,7 +42,7 @@ export const LoginPage = () => {
 
   return (
     <>
-      <Card alignItems={"center"} h={"400px"} w={"600px"} m={"auto"} mt={"50px"} padding={"30px"}>
+      <Card alignItems={"center"} h={"450px"} w={"600px"} m={"auto"} mt={"50px"} padding={"30px"}>
         <Flex align={"center"}>
           {/* <form onSubmit={(e) => { handleLogin(e) }}> */}
           <form onSubmit={handleLogin}>
@@ -68,7 +70,9 @@ export const LoginPage = () => {
                 </CardBody>
                 <CardBody>
                   <Button type="submit">Login</Button>
-                  {/* <button type="submit">Login</button> */}
+                </CardBody>
+                <CardBody>
+                <Button onClick={() => { navigate("/register") }}>Sign up new user</Button>
                 </CardBody>
               </FormControl>
             </CardBody>
