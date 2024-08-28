@@ -10,13 +10,23 @@ import { LoginPage } from './pages/LoginPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Secret } from './pages/Secret';
 import { AuthProvider } from './hooks/useAuth';
+import { RegisterPage } from './pages/RegisterPage';
+import { GeneralErrorPage } from './pages/GeneralErrorPpage';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <AuthProvider>
       <LoginPage></LoginPage>,
-    </AuthProvider>
+    </AuthProvider>,
+    errorElement: <GeneralErrorPage />
+  },
+  {
+    path: "/register",
+    element: <AuthProvider>
+      <RegisterPage></RegisterPage>,
+    </AuthProvider>,
+    errorElement: <GeneralErrorPage />
   },
   {
     path: "/chat",
@@ -25,14 +35,15 @@ const router = createBrowserRouter([
         <ProtectedRoute>
           <Secret />
         </ProtectedRoute>
-      </AuthProvider>
+      </AuthProvider>,
+    errorElement: <GeneralErrorPage />
   },
 ]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChakraProvider>
-        <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </ChakraProvider>
   </StrictMode>,
 )
