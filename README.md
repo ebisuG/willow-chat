@@ -1,11 +1,12 @@
 
 # App Overview
-This is a simple chat app supposed to be hosted on Vercel.<br>
+This is a simple chat app sample supposed to be hosted on Vercel.<br>
 Tech stack is:<br>
 Front - Vite + React<br>
 Back  - Vercel serverless function with Golang<br>
 DB    - Vercel KV(Redis)<br>
 
+Disclaimer - This is still in progress.
 
 ## Architecture
 ![alt text](image-1.png)
