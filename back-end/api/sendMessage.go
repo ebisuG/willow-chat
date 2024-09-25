@@ -13,8 +13,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// Check roomid
-// insert message to room with roomId
 type message struct {
 	From    string `json:"from"`
 	Date    string `json:"date"`
@@ -28,7 +26,6 @@ func (m message) MarshalBinary() ([]byte, error) {
 }
 
 func SendeMessage(w http.ResponseWriter, r *http.Request) {
-	// var roomId string
 	if method := r.Method; method != "POST" {
 		w.WriteHeader(405)
 		fmt.Fprintf(w, "Only accept POST")

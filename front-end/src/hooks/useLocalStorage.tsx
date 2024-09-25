@@ -18,9 +18,6 @@ export const useLocalStorage: (keyName: string, defaultValue: null) =>
                 return defaultValue;
             }
         });
-        // const setValue<T extends keyof authInfo>(newValue: authInfo[T]): void => {
-        //T is type parameter, it describes the information about type of variable.
-        // const setValue: <T extends keyof authInfo>(newValue: authInfo[T]) => void = (newValue) => {
         const setValue: (newValue: authInfo | null) => void = (newValue) => {
             try {
                 window.localStorage.setItem(keyName, JSON.stringify(newValue));

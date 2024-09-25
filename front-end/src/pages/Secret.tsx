@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import Chat from "../Chat";
+import Chat from "../components/Chat";
 import { useAuth } from "../hooks/useAuth";
 
 
