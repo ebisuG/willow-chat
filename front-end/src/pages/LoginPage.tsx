@@ -42,7 +42,6 @@ export const LoginPage = () => {
     <>
       <Card alignItems={"center"} h={"400px"} w={"600px"} m={"auto"} mt={"50px"} padding={"30px"}>
         <Flex align={"center"}>
-          {/* <form onSubmit={(e) => { handleLogin(e) }}> */}
           <form onSubmit={handleLogin}>
             <CardBody padding={"10px"}>
               <FormControl >
@@ -68,7 +67,6 @@ export const LoginPage = () => {
                 </CardBody>
                 <CardBody>
                   <Button type="submit">Login</Button>
-                  {/* <button type="submit">Login</button> */}
                 </CardBody>
               </FormControl>
             </CardBody>

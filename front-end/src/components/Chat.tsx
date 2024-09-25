@@ -18,11 +18,10 @@ export const Chat = () => {
 
   const sendMessage = () => {
     async function fetchMessage() {
-      const fetched = await fetch(BACKEND_SEND, {
+      await fetch(BACKEND_SEND, {
         method: "POST",
         body: JSON.stringify({ from: from, message: message, date: new Date().toISOString(), roomId: "100" })
       })
-      console.log(fetched)
     }
     fetchMessage()
   };
@@ -35,14 +34,10 @@ export const Chat = () => {
         setFetchedMessage(historyObj.sortedHistory.map((elem) => JSON.parse(elem)))
       }
     }
-    console.log(fetchedMessage)
     fetchMessage()
   }
 
   const showHistory = (history: message[] | undefined) => {
-    // history = [{ from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo', roomId: '100' },
-    // { from: 'Alice ', date: '2024-08-21T08:56:34.714Z', message: ' Alice dayo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooo ooooooooooooooooooooooooooo ooooooooooooooooooooooooooooooooooooooooooooooooooooooo', roomId: '100' }
-    // ] //test code
     if (!Array.isArray(history) || history === undefined) { return null } else {
       return (history.map((elem: message, index: number) => {
         console.log(elem, index)
