@@ -8,10 +8,6 @@
                     "value": "https://willow-chat-git-develop-ebisus-projects-5461df08.vercel.app"
                 },
                 {
-                    "key": "Access-Control-Allow-Origin",
-                    "value": "https://willow-chat-phi.vercel.app"
-                },
-                {
                     "key": "Access-Control-Allow-Credentials",
                     "value": "true"
                 },
