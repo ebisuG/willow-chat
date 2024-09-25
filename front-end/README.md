@@ -26,6 +26,8 @@ For windows:
 # install
 $ docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
 ```
+Local redis quick start document:<br>
+https://redis.io/learn/howtos/quick-start
 
 ### Backend
 Backend is Vercel serverless function, there's no way to emulate in local.<br>
