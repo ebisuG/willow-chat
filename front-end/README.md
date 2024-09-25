@@ -1,35 +1,41 @@
-## Files
 
-### package.json
-
- - vercel-build<br>
- Vercel runs this command when it builds app.
-
-### .env.example
-
- - VITE_BACKEND_RECEIVE<br>
- An endpoint to receive data from Redis.
-
- - VITE_BACKEND_SEND<br>
- An endpoint to send data to Redis.
+# App Overview
+This is a simple chat app supposed to be hosted on Vercel.<br>
+Tech stack is:<br>
+Front - Vite + React<br>
+Back  - Vercel serverless function with Golang<br>
+DB    - Vercel KV(Redis)<br>
 
 
-## Commands
+## Architecture
+![alt text](image-1.png)
 
-Redis CLI: 
-SET/GET : only takes key/value. <br>
-SADD/SMEMBERS : takes key/value. but one key can have multiple values, with no order. <br>
-ZADD/ZRANGE : takes key/value and score(=definition of order). one key has multiple values with order. <br>
-HSET/HGET,HGETALL : takes key/field-value(=map) pairs. can get value by key+field definition, can get all field-value pairs by key.<br>
+## Setup
+### Frontend
+```bash
+#install packages
+npm install
 
-## Tech Stack - Front End
+#run local(only frontend)
+npm run dev
+```
+### Vercel KV
+Vercel KV is basically redis database. Docker is necessary.
+For windows:
+```bash
+# install
+$ docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+```
 
-###
+### Backend
+Backend is Vercel serverless function, there's no way to emulate in local.<br>
+One way is to run golang server locally, connect it with local redis container. <br>
+Then, throw http request to the endpoint.
 
-## Other Things
+# Development
+
+See README.development.md file.
 
 
-I thought using firebase, but it seems it needs to upload secret-key to github for authorization of access to firestore from vercel.
-So I deceided not to use firebase because of security concern.
 
 
